@@ -5,12 +5,14 @@ import cors from "cors";
 import dotenv from "dotenv";
 import multer from "multer";
 import helmet from "helmet";
+import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
+import Users from "./models/Users.js"
 
 /*CONNECTION*/
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.__dirname(__filename);
+const __dirname = path.dirname(__filename);
 dotenv.config();
 
 const app = express();
@@ -22,8 +24,8 @@ app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin"}));
 app.use(morgan());
 app.use(cors());
-const buildPath = path.join(__dirname,'build');
-app.use(express.static());
+// const buildPath = path.join(__dirname,'build/assets');
+app.use("/assets",express.static(path.join(__dirname,'build/assets')));
 
 /*FILE STORAGE*/
 const storage = multer.diskStorage({
@@ -35,5 +37,17 @@ const storage = multer.diskStorage({
     },
 
 });
-
+app.get("/", (req, res) => {
+    res.send("Server is running 🚀");
+  });
 const upload = multer({storage});
+/*MONGO DB SETUP*/
+const PORT = process.env.PORT || 4001
+mongoose.connect(process.env.MONGO_URL,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(()=> {
+    app.listen(PORT, () => console.log(`Server Port : ${PORT}`));
+    Users.find({},{firstName:1,location: 1}).then(console.log);
+})
+.catch((error) => console.log(`${error} did not connect`))
