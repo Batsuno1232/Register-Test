@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
     location:String,
     occupation:String,
     viewedProfile:Number,
-    impressions:Number,
+    impressions:Number
 
 },
 {
@@ -18,5 +18,5 @@ const userSchema = new mongoose.Schema(
 }
 );
 
-const Post = mongoose.model('Post',userSchema);
-export default Post;
+const User = mongoose.model('User',userSchema);
+export default User;

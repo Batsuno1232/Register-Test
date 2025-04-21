@@ -1,4 +1,3 @@
-import { fontFamily, palette } from "@mui/system";
 
 export const colorTokens = {
     gray: {
